@@ -232,7 +232,7 @@ void ColorTriangle::RenderFrame()
 void ColorTriangle::ColorChangedCallback()
 {
   uint32_t color = static_cast<uint32_t>(_red) << 16 | static_cast<uint32_t>(_green) << 8 | static_cast<uint32_t>(_blue);
-  EM_ASM_ARGS(onColorChanged($0), color);
+  EM_ASM_ARGS(onColorChanged($0, $1), this, color);
 }
 
 

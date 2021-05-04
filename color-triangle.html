@@ -59,8 +59,9 @@
       </div>
     </div>
     <script>
-      document.getElementById("color-triangle").addEventListener("oncolorchanged", function(event) {
-        console.log("Color changed to " + event.detail.color);
+      var colorTriangle = document.getElementById("color-triangle");
+      colorTriangle.addEventListener("oncolorchanged", function(event) {
+        console.log("Color of \"" + colorTriangle.id + "\" changed to " + event.detail.color);
       });
     </script>
   </body>

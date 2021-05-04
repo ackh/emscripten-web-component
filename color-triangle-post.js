@@ -98,7 +98,9 @@ export default class ColorTriangle extends HTMLElement {
   }
 
   colorChangedHandler(event) {
-    this.dispatchEvent(new CustomEvent(eventColorChanged, { detail: { color: event.detail.color }}));
+    if(this.colorTriangle.$$.ptr == event.detail.sender) {
+      this.dispatchEvent(new CustomEvent(eventColorChanged, { detail: { color: event.detail.color }}));
+    }
   }
 
   contextMenuHandler(event) {
@@ -114,8 +116,8 @@ function intToHexColor(number) {
   return "#" + (number & 0x00FFFFFF).toString(16).padStart(6, "0");
 }
 
-function onColorChanged(color) {
-  document.dispatchEvent(new CustomEvent(eventColorChanged, { detail: { color: intToHexColor(color) }}));
+function onColorChanged(sender, color) {
+  document.dispatchEvent(new CustomEvent(eventColorChanged, { detail: { sender: sender, color: intToHexColor(color) }}));
 }
 
 createModule().then(instance => {
