@@ -10,7 +10,7 @@ const attributeBlue     = "blue";
 
 var module;
 
-class ColorTriangle extends HTMLElement {
+export default class ColorTriangle extends HTMLElement {
   constructor() {
     super();
     this.resizeObserver = new ResizeObserver(this.resizeHandler.bind(this));
