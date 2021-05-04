@@ -58,5 +58,10 @@
         <input type="range" class="slider" min="0" max="255" value="255" data-color="blue" id="slider-blue" oninput="sliderInputHandler(this.value, this);"/>
       </div>
     </div>
+    <script>
+      document.getElementById("color-triangle").addEventListener("oncolorchanged", function(event) {
+        console.log("Color changed to " + event.detail.color);
+      });
+    </script>
   </body>
 </html>

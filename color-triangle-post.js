@@ -1,11 +1,12 @@
 "use strict";
 
-const webComponentName = "color-triangle";
-const canvasIdentifier = "canvas";
-const eventModuleReady = "onmoduleready";
-const attributeRed     = "red";
-const attributeGreen   = "green";
-const attributeBlue    = "blue";
+const webComponentName  = "color-triangle";
+const canvasIdentifier  = "canvas";
+const eventModuleReady  = "onmoduleready";
+const eventColorChanged = "oncolorchanged";
+const attributeRed      = "red";
+const attributeGreen    = "green";
+const attributeBlue     = "blue";
 
 var module;
 
@@ -34,7 +35,8 @@ class ColorTriangle extends HTMLElement {
   }
 
   connectedCallback() {
-    document.addEventListener(eventModuleReady, this.createInstance.bind(this));
+    document.addEventListener(eventModuleReady , this.createInstance.bind(this));
+    document.addEventListener(eventColorChanged, this.colorChangedHandler.bind(this));
     this.resizeObserver.observe(this, { box: "content-box" });
     this.style.display        = "flex";
     this.style.justifyContent = "center";
@@ -95,6 +97,10 @@ class ColorTriangle extends HTMLElement {
     }
   }
 
+  colorChangedHandler(event) {
+    this.dispatchEvent(new CustomEvent(eventColorChanged, { detail: { color: event.detail.color }}));
+  }
+
   contextMenuHandler(event) {
     event.preventDefault();
   }
@@ -102,6 +108,14 @@ class ColorTriangle extends HTMLElement {
 
 if(!customElements.get(webComponentName)) {
   customElements.define(webComponentName, ColorTriangle);
+}
+
+function intToHexColor(number) {
+  return "#" + (number & 0x00FFFFFF).toString(16).padStart(6, "0");
+}
+
+function onColorChanged(color) {
+  document.dispatchEvent(new CustomEvent(eventColorChanged, { detail: { color: intToHexColor(color) }}));
 }
 
 createModule().then(instance => {

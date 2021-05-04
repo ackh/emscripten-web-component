@@ -61,6 +61,7 @@ void ColorTriangle::SetRed(uint8_t red)
 {
   _red = red;
   UpdateColor();
+  ColorChangedCallback();
 }
 
 
@@ -68,6 +69,7 @@ void ColorTriangle::SetGreen(uint8_t green)
 {
   _green = green;
   UpdateColor();
+  ColorChangedCallback();
 }
 
 
@@ -75,6 +77,7 @@ void ColorTriangle::SetBlue(uint8_t blue)
 {
   _blue = blue;
   UpdateColor();
+  ColorChangedCallback();
 }
 
 
@@ -223,6 +226,13 @@ void ColorTriangle::RenderFrame()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+
+void ColorTriangle::ColorChangedCallback()
+{
+  uint32_t color = static_cast<uint32_t>(_red) << 16 | static_cast<uint32_t>(_green) << 8 | static_cast<uint32_t>(_blue);
+  EM_ASM_ARGS(onColorChanged($0), color);
 }
 
 

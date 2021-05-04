@@ -1,0 +1,1 @@
+var onColorChanged = function(color) {};

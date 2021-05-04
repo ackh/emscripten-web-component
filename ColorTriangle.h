@@ -58,6 +58,7 @@ namespace EmscriptenWebComponent
     void CreateBuffer();
     void UpdateColor();
     void RenderFrame();
+    void ColorChangedCallback();
 
     static void Render(void* arg);
 

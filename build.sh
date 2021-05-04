@@ -4,6 +4,8 @@ target_folder=bin/
 
 mkdir -p $target_folder
 
+export EMCC_CLOSURE_ARGS="--externs color-triangle-externs.js"
+
 emcc \
 ColorTriangle.cpp \
 -I./ \
