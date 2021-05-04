@@ -3,6 +3,9 @@
 const webComponentName = "color-triangle";
 const canvasIdentifier = "canvas";
 const eventModuleReady = "onmoduleready";
+const attributeRed     = "red";
+const attributeGreen   = "green";
+const attributeBlue    = "blue";
 
 var module;
 
@@ -15,7 +18,19 @@ class ColorTriangle extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return [colorAttribute];
+    return [attributeRed, attributeGreen, attributeBlue];
+  }
+
+  attributeChangedCallback(attributeName, oldValue, newValue) {
+    if(this.colorTriangle) {
+      switch(attributeName) {
+        case attributeRed:
+        case attributeGreen:
+        case attributeBlue:
+          this.colorTriangle[attributeName] = parseInt(newValue);
+          break;
+      }
+    }
   }
 
   connectedCallback() {
@@ -34,9 +49,36 @@ class ColorTriangle extends HTMLElement {
     this.createInstance();
   }
 
+  set red(value) {
+    this.setAttribute(attributeRed, value)
+  }
+
+  get red() {
+    return this.colorTriangle ? this.colorTriangle.red : undefined;
+  }
+
+  set green(value) {
+    this.setAttribute(attributeGreen, value)
+  }
+
+  get green() {
+    return this.colorTriangle ? this.colorTriangle.green : undefined;
+  }
+
+  set blue(value) {
+    this.setAttribute(attributeBlue, value)
+  }
+
+  get blue() {
+    return this.colorTriangle ? this.colorTriangle.blue : undefined;
+  }
+
   createInstance() {
     if(module && !this.colorTriangle) {
-      this.colorTriangle = new module.ColorTriangle(canvasIdentifier);
+      let red            = parseInt(this.getAttribute(attributeRed))   || 0;
+      let green          = parseInt(this.getAttribute(attributeGreen)) || 0;
+      let blue           = parseInt(this.getAttribute(attributeBlue))  || 0;
+      this.colorTriangle = new module.ColorTriangle(canvasIdentifier, red, green, blue);
       this.colorTriangle.startRenderingLoop();
     }
   }

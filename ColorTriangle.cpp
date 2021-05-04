@@ -7,8 +7,11 @@ using namespace emscripten;
 using namespace EmscriptenWebComponent;
 
 
-ColorTriangle::ColorTriangle(std::string canvasIdentifier)
+ColorTriangle::ColorTriangle(std::string canvasIdentifier, uint8_t red, uint8_t green, uint8_t blue)
 {
+  _red   = red;
+  _green = green;
+  _blue  = blue;
   int width, height;
   Initialize(canvasIdentifier);
   emscripten_get_canvas_element_size(canvasIdentifier.c_str(), &width, &height);
@@ -16,6 +19,7 @@ ColorTriangle::ColorTriangle(std::string canvasIdentifier)
   ConfigureOpenGL();
   CreateShaders();
   CreateBuffer();
+  UpdateColor();
 }
 
 
@@ -50,6 +54,45 @@ void ColorTriangle::StartRenderingLoop()
 void ColorTriangle::StopRenderingLoop()
 {
   emscripten_cancel_main_loop();
+}
+
+
+void ColorTriangle::SetRed(uint8_t red)
+{
+  _red = red;
+  UpdateColor();
+}
+
+
+void ColorTriangle::SetGreen(uint8_t green)
+{
+  _green = green;
+  UpdateColor();
+}
+
+
+void ColorTriangle::SetBlue(uint8_t blue)
+{
+  _blue = blue;
+  UpdateColor();
+}
+
+
+uint8_t ColorTriangle::GetRed() const
+{
+  return _red;
+}
+
+
+uint8_t ColorTriangle::GetGreen() const
+{
+  return _green;
+}
+
+
+uint8_t ColorTriangle::GetBlue() const
+{
+  return _blue;
 }
 
 
@@ -147,6 +190,7 @@ void ColorTriangle::ConfigureOpenGL()
   glDisable(GL_DITHER);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
+  glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 }
 
 
@@ -154,7 +198,7 @@ void ColorTriangle::CreateShaders()
 {
   _program                  = CompileProgram(vertexShaderSource, fragmentShaderSource);
   _coordinateAttribLocation = glGetAttribLocation(_program, "aCoordinate");
-  _colorAttribLocation      = glGetAttribLocation(_program, "aColor");
+  _colorUniformLocation     = glGetUniformLocation(_program, "uColor");
   glUseProgram(_program);
 }
 
@@ -164,15 +208,14 @@ void ColorTriangle::CreateBuffer()
   glGenBuffers(1, &_vertexBuffer);
   glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
   glEnableVertexAttribArray(_coordinateAttribLocation);
-  glEnableVertexAttribArray(_colorAttribLocation);
+  glVertexAttribPointer(_coordinateAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, reinterpret_cast<GLvoid*>(0));
+}
 
-  GLsizei size   = sizeof(float) * 3;
-  GLsizei stride = size * 2;
 
-  glVertexAttribPointer(_coordinateAttribLocation, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(0));
-  glVertexAttribPointer(_colorAttribLocation     , 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(size));
+void ColorTriangle::UpdateColor()
+{
+  glUniform3f(_colorUniformLocation, _red / 255.0f, _green / 255.0f, _blue / 255.0f);
 }
 
 
