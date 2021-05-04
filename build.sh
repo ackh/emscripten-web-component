@@ -17,7 +17,6 @@ ColorTriangle.cpp \
 -s EXPORT_NAME=createModule \
 -v \
 --bind \
---closure 1 \
 --extern-post-js color-triangle-post.js \
 -O3 \
 -o ${target_folder}color-triangle.js

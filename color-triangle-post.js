@@ -13,6 +13,7 @@ var module;
 export default class ColorTriangle extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({mode: 'open'});
     this.resizeObserver = new ResizeObserver(this.resizeHandler.bind(this));
     this.canvas         = null;
     this.colorTriangle  = null;
@@ -46,7 +47,7 @@ export default class ColorTriangle extends HTMLElement {
     this.canvas.oncontextmenu = this.contextMenuHandler;
     this.canvas.style.width   = "100%";
     this.canvas.style.height  = "100%";
-    this.appendChild(this.canvas);
+    this.shadowRoot.appendChild(this.canvas);
     this.resizeCanvasBuffer();
     this.createInstance();
   }
