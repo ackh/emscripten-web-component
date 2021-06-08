@@ -12,57 +12,47 @@
       }
       .grid {
         display: grid;
-        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-columns: 1fr 2fr 2fr 1fr;
         grid-template-rows: 50px auto 30px 30px 30px 50px;
         width: 100vw;
         height: 100vh;
-      }
-      .color-triangle-container {
-        grid-column: 2;
-        grid-row: 2;
       }
       .color-triangle {
         width : 100%;
         height : 100%;
       }
-      .slider-container {
-        grid-column: 2;
+      .slider {
+        width: 90%;
+        height: 100%;
         justify-content: center;
         align-items: center;
-      }
-      .slider {
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <script type="module" src="color-triangle.js"></script>
     <script>
-      function sliderInputHandler(value, slider) {
-        document.getElementById("color-triangle")[slider.dataset.color] = parseInt(value);
+      function loadHandler(event) {
+        console.log(event.srcElement.id + " finished loading");
+      }
+
+      function changeHandler(event) {
+        console.log(event.srcElement.id + " changed color to " + event.detail.color);
+      }
+
+      function sliderInputHandler(value, colorTriangleId, slider) {
+        document.getElementById(colorTriangleId)[slider.dataset.color] = parseInt(value);
       }
     </script>
     <div class="grid">
-      <div class="color-triangle-container">
-        <color-triangle class="color-triangle" red="0" green="128" blue="255" id="color-triangle"></color-triangle>
-      </div>
-      <div class="slider-container" style="grid-row: 3;">
-        <input type="range" class="slider" min="0" max="255" value="0" data-color="red" id="slider-red" oninput="sliderInputHandler(this.value, this);"/>
-      </div>
-      <div class="slider-container" style="grid-row: 4;">
-        <input type="range" class="slider" min="0" max="255" value="128" data-color="green" id="slider-green" oninput="sliderInputHandler(this.value, this);"/>
-      </div>
-      <div class="slider-container" style="grid-row: 5;">
-        <input type="range" class="slider" min="0" max="255" value="255" data-color="blue" id="slider-blue" oninput="sliderInputHandler(this.value, this);"/>
-      </div>
+      <color-triangle class="color-triangle" style="grid-column: 2; grid-row: 2;" red="0"   green="148" blue="255" id="color-triangle-1" onload="loadHandler(event);" onchange="changeHandler(event);"></color-triangle>
+      <color-triangle class="color-triangle" style="grid-column: 3; grid-row: 2;" red="255" green="108" blue="0"   id="color-triangle-2" onload="loadHandler(event);" onchange="changeHandler(event);"></color-triangle>
+      <input type="range" class="slider" style="grid-column: 2; grid-row: 3;" min="0" max="255" value="0"   data-color="red"   id="slider-red-1"   oninput="sliderInputHandler(this.value, 'color-triangle-1', this);"/>
+      <input type="range" class="slider" style="grid-column: 2; grid-row: 4;" min="0" max="255" value="148" data-color="green" id="slider-green-1" oninput="sliderInputHandler(this.value, 'color-triangle-1', this);"/>
+      <input type="range" class="slider" style="grid-column: 2; grid-row: 5;" min="0" max="255" value="255" data-color="blue"  id="slider-blue-1"  oninput="sliderInputHandler(this.value, 'color-triangle-1', this);"/>
+      <input type="range" class="slider" style="grid-column: 3; grid-row: 3;" min="0" max="255" value="255" data-color="red"   id="slider-red-2"   oninput="sliderInputHandler(this.value, 'color-triangle-2', this);"/>
+      <input type="range" class="slider" style="grid-column: 3; grid-row: 4;" min="0" max="255" value="108" data-color="green" id="slider-green-2" oninput="sliderInputHandler(this.value, 'color-triangle-2', this);"/>
+      <input type="range" class="slider" style="grid-column: 3; grid-row: 5;" min="0" max="255" value="0"   data-color="blue"  id="slider-blue-2"  oninput="sliderInputHandler(this.value, 'color-triangle-2', this);"/>
     </div>
-    <script>
-      var colorTriangle = document.getElementById("color-triangle");
-      colorTriangle.addEventListener("oncolorchanged", function(event) {
-        console.log("Color of \"" + colorTriangle.id + "\" changed to " + event.detail.color);
-      });
-    </script>
   </body>
 </html>
